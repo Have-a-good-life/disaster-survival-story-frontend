@@ -12,6 +12,7 @@ import Prompt from "./pages/prompt";
 import Result from "./pages/result";
 import Splash from "./pages/splash";
 import Survival from "./pages/survival";
+import Final from "./pages/final";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
       <Route path={paths.result} element={<Result />} />
       <Route path={paths.splash} element={<Splash />} />
       <Route path={paths.survival} element={<Survival />} />
+      <Route path={paths.final} element={<Final />} />
     </Route>
   )
 );

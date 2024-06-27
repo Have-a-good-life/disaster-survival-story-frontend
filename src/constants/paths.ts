@@ -4,6 +4,7 @@ const paths = {
   result: "/result",
   splash: "/splash",
   survival: "/survival",
+  final: "/final",
 };
 
 export default paths;
