@@ -7,15 +7,26 @@ import backgroundImg from "@/assets/images/promptbg.png";
 import { useNavigate } from "react-router-dom";
 import paths from "@/constants/paths";
 import { useRecoilState } from "recoil";
-import { progressState } from "@/recoils/atoms";
+import {
+  evaluationState,
+  injuryState,
+  progressState,
+  situationState,
+} from "@/recoils/atoms";
+
+import { useTypingEffect } from "@/hooks/useTypingEffects";
+import { evaluateUserReaction } from "@/apis/prompt";
 
 const Prompt = () => {
   const [progress, setProgress] = useRecoilState(progressState);
-  const [page, setPage] = useState<"prompt" | "answer">("prompt");
+  const [page, setPage] = useState<"prompt" | "answer" | "result">("prompt");
   const [showSlide, setShowSlide] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [evaluation, setEvaluation] = useRecoilState(evaluationState);
+  const [injury, setInjury] = useRecoilState(injuryState);
   const navigate = useNavigate();
-
+  const [situation] = useRecoilState(situationState);
+  const displayedDesc = useTypingEffect(situation.situationDesc || "", 100);
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((prevProgress) => {
@@ -38,7 +49,7 @@ const Prompt = () => {
                 });
               }, 1000);
             }, 3000); // 슬라이드 애니메이션 시간
-          }, 1000); // 프로그레스 바가 다 사라진 후 1초 후 슬라이드 시작
+          }, 1500); // 프로그레스 바가 다 사라진 후 1초 후 슬라이드 시작
           return 0;
         }
         return prevProgress - 100 / 15;
@@ -55,8 +66,23 @@ const Prompt = () => {
     }
   };
 
-  const handleTestClick = () => {
+  const handleTestClick = async () => {
     setProgress(0);
+    if (situation.situationId === undefined) {
+      console.error("Situation ID is undefined");
+      return;
+    }
+    try {
+      const response = await evaluateUserReaction({
+        situation_id: situation.situationId,
+        user_reaction: inputValue,
+      });
+      setEvaluation(response.evaluation);
+      setInjury(response.injury);
+      setPage("result");
+    } catch (error) {
+      console.error("Failed to evaluate user reaction:", error);
+    }
   };
 
   return (
@@ -68,7 +94,7 @@ const Prompt = () => {
       {showSlide && <Slide />}
       <PromptWrapper page={page} showSlide={showSlide}>
         <PromptMsgWrapper>
-          메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥메시쥥
+          {page === "prompt" ? displayedDesc : situation.situationDesc}
         </PromptMsgWrapper>
       </PromptWrapper>
       {page === "answer" && (

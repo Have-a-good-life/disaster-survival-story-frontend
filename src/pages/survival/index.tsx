@@ -4,24 +4,20 @@ import ingMsg from "@/assets/images/ingMsg.png";
 import testCharacter from "@/assets/images/testCharacter.png";
 import { useNavigate } from "react-router-dom";
 import paths from "@/constants/paths";
+import { evaluationState, injuryState } from "@/recoils/atoms";
+import { useRecoilValue } from "recoil";
 
 const Index = () => {
   const [isApiSuccess, setIsApiSuccess] = useState(false);
+  const evaluation = useRecoilValue(evaluationState);
+  const injury = useRecoilValue(injuryState);
   const navigate = useNavigate();
-  // Simulate an API call
+
   useEffect(() => {
-    const simulateApiCall = () => {
-      setTimeout(() => {
-        setIsApiSuccess(true);
-      }, 2000); // Simulating a 2 seconds delay for the API call
-    };
-
-    simulateApiCall();
-  }, []);
-
-  if (isApiSuccess) {
-    navigate(paths.result);
-  }
+    if (evaluation !== "" && injury !== "") {
+      navigate(paths.result);
+    }
+  }, [evaluation, injury, navigate]);
 
   return (
     <Container>

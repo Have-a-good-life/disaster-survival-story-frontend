@@ -1,15 +1,31 @@
 import paths from "@/constants/paths";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled, { css, keyframes } from "styled-components";
-
 import splash1 from "@/assets/images/splash1.png";
 import splash2 from "@/assets/images/splash2.png";
 import splash3 from "@/assets/images/splash3.png";
+import { getRandomSituation } from "@/apis/prompt";
+import { situationState } from "@/recoils/atoms";
+import { Situation } from "@/types/prompt";
+import { useQuery } from "react-query";
+import { useRecoilState } from "recoil";
 
 const Splash = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   const navigate = useNavigate();
+  const { data, error, isLoading } = useQuery<Situation>(
+    "randomSituation",
+    getRandomSituation
+  );
+  const [situation, setSituation] = useRecoilState(situationState);
+
+  useEffect(() => {
+    if (data) {
+      setSituation(data);
+    }
+  }, [data, setSituation]);
 
   const images = [splash1, splash2, splash3];
 
@@ -22,7 +38,7 @@ const Splash = () => {
     } else {
       const timer = setTimeout(() => {
         navigate(paths.prompt);
-      }, 3000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [currentImageIndex, images.length, navigate]);
