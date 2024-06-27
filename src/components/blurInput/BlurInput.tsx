@@ -12,7 +12,7 @@ const BlurInput = ({ text }: { text: string }) => {
 export default BlurInput;
 const Container = styled.div`
   width: 23.1875rem;
-  height: 18.25rem;
+  height: 30.25rem;
   flex-shrink: 0;
   border-radius: 1.875rem;
   border: 1px solid #fff;
@@ -29,6 +29,6 @@ const Text = styled.div`
   font-size: 1.25rem;
   color: #fff;
   font-family: "VitroPride";
-  text-align: center;
+  text-align: left;
   line-height: 1.5;
 `;
