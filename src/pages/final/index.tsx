@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import bestImg from "@/assets/images/bestMsg.png";
 import GuideButton from "@/components/button/GuideButton";
 import { theme } from "@/styles/theme";
 import { useNavigate } from "react-router-dom";
 import paths from "@/constants/paths";
 import BlurInput from "@/components/blurInput/BlurInput";
-import { situationState } from "@/recoils/atoms";
+import {
+  evaluationState,
+  injuryState,
+  progressState,
+  situationState,
+} from "@/recoils/atoms";
 
 import { useTypingEffect } from "@/hooks/useTypingEffects";
 import { getBestReactions } from "@/apis/prompt";
@@ -15,6 +20,11 @@ import { getBestReactions } from "@/apis/prompt";
 const Final = () => {
   const navigate = useNavigate();
   const situation = useRecoilValue(situationState);
+  const resetSituation = useResetRecoilState(situationState);
+  const resetEvaluation = useResetRecoilState(evaluationState);
+  const resetInjury = useResetRecoilState(injuryState);
+  const resetProgress = useResetRecoilState(progressState);
+
   const [bestReactions, setBestReactions] =
     useState<string>("행동 지침 요령 작성 중...");
   const displayedReactions = useTypingEffect(bestReactions, 100);
@@ -37,11 +47,20 @@ const Final = () => {
     fetchBestReactions();
   }, [situation.situationId]);
 
+  const resetAllRecoilStates = () => {
+    resetSituation();
+    resetEvaluation();
+    resetInjury();
+    resetProgress();
+  };
+
   const handleRetryClick = () => {
+    resetAllRecoilStates();
     navigate(paths.splash);
   };
 
   const handleGoHomeClick = () => {
+    resetAllRecoilStates();
     navigate(paths.home);
   };
 

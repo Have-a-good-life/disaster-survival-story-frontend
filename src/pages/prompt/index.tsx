@@ -13,7 +13,6 @@ import {
   progressState,
   situationState,
 } from "@/recoils/atoms";
-
 import { useTypingEffect } from "@/hooks/useTypingEffects";
 import { evaluateUserReaction } from "@/apis/prompt";
 
