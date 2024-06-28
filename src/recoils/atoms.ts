@@ -29,3 +29,8 @@ export const currentPageState = atom({
   key: "currentPageState",
   default: "/",
 });
+
+export const manualOpenState = atom({
+  key: "manualOpenState",
+  default: false,
+});

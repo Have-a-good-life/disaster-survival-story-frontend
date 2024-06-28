@@ -20,6 +20,10 @@ const Result = () => {
   const navigate = useNavigate();
   const [showImage, setShowImage] = useState(false);
   useEffect(() => {
+    if (!injury || !evaluation) {
+      navigate(paths.noanswer);
+      return;
+    }
     if (displayedEvaluation === evaluation) {
       setShowImage(true);
     }

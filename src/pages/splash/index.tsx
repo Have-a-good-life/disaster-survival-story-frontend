@@ -19,13 +19,20 @@ const Splash = () => {
     "randomSituation",
     getRandomSituation
   );
+
   const [situation, setSituation] = useRecoilState(situationState);
 
   useEffect(() => {
+    if (error) {
+      console.error("Failed to fetch random situation:", error);
+      navigate(paths.noanswer);
+      return;
+    }
+
     if (data) {
       setSituation(data);
     }
-  }, [data, setSituation]);
+  }, [data, error, setSituation, navigate]);
 
   const images = [splash1, splash2, splash3];
 
@@ -37,6 +44,10 @@ const Splash = () => {
       return () => clearTimeout(timer);
     } else {
       const timer = setTimeout(() => {
+        if (!data) {
+          navigate(paths.noanswer);
+          return;
+        }
         navigate(paths.prompt);
       }, 2000);
       return () => clearTimeout(timer);

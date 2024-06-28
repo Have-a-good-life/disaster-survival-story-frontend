@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { styled } from "styled-components";
 
 type Props = {
   children: React.ReactNode;
@@ -18,11 +19,20 @@ const BackDrop = ({ children, isOpen }: Props) => {
     };
   }, [isOpen]);
 
-  return (
-    <div className="fixed top-0 left-0 w-full h-full bg-[#00000040] z-100 flex justify-center items-center">
-      {children ?? null}
-    </div>
-  );
+  return <Container>{children ?? null}</Container>;
 };
 
 export default BackDrop;
+
+const Container = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: #00000040;
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;

@@ -29,6 +29,14 @@ const Prompt = () => {
   const displayedDesc = useTypingEffect(situation.situationDesc || "", 100);
 
   useEffect(() => {
+    if (
+      !situation.situationId ||
+      !situation.situationName ||
+      !situation.situationDesc
+    ) {
+      navigate(paths.noanswer);
+      return;
+    }
     let firstTimer: NodeJS.Timeout;
     let secondTimer: NodeJS.Timeout;
 
@@ -98,7 +106,7 @@ const Prompt = () => {
       setInjury(response.injury);
       setPage("result");
     } catch (error) {
-      console.error("Failed to evaluate user reaction:", error);
+      navigate(paths.noanswer);
     }
   };
 

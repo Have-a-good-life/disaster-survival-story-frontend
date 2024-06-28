@@ -1,52 +1,24 @@
-import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { useRecoilValue, useResetRecoilState } from "recoil";
-import bestImg from "@/assets/images/bestMsg.png";
+import noanswerMsg from "@/assets/images/noanswerMsg.png";
 import GuideButton from "@/components/button/GuideButton";
-import { theme } from "@/styles/theme";
-import { useNavigate } from "react-router-dom";
 import paths from "@/constants/paths";
-import BlurInput from "@/components/blurInput/BlurInput";
 import {
+  situationState,
   evaluationState,
   injuryState,
   progressState,
-  situationState,
 } from "@/recoils/atoms";
+import { theme } from "@/styles/theme";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 
-import { useTypingEffect } from "@/hooks/useTypingEffects";
-import { getBestReactions } from "@/apis/prompt";
-
-const Final = () => {
+const Timeout = () => {
   const navigate = useNavigate();
   const situation = useRecoilValue(situationState);
   const resetSituation = useResetRecoilState(situationState);
   const resetEvaluation = useResetRecoilState(evaluationState);
   const resetInjury = useResetRecoilState(injuryState);
   const resetProgress = useResetRecoilState(progressState);
-
-  const [bestReactions, setBestReactions] =
-    useState<string>("모범 행동 강령 작성 중...");
-  const displayedReactions = useTypingEffect(bestReactions, 100);
-
-  useEffect(() => {
-    const fetchBestReactions = async () => {
-      try {
-        if (
-          situation.situationId !== null &&
-          situation.situationId !== undefined
-        ) {
-          const response = await getBestReactions(situation.situationId);
-          setBestReactions(response);
-        }
-      } catch (error) {
-        navigate(paths.noanswer);
-      }
-    };
-
-    fetchBestReactions();
-  }, [situation.situationId]);
-
   const resetAllRecoilStates = () => {
     resetSituation();
     resetEvaluation();
@@ -63,13 +35,9 @@ const Final = () => {
     resetAllRecoilStates();
     navigate(paths.home);
   };
-
   return (
     <Container>
-      <HeaderWrapper>
-        <BestImg src={bestImg} />
-      </HeaderWrapper>
-      <BlurInput text={displayedReactions} />
+      <NoAnsImg src={noanswerMsg} />
       <ButtonWrapper>
         <GuideButton
           label="다시하기"
@@ -90,7 +58,13 @@ const Final = () => {
   );
 };
 
-export default Final;
+export default Timeout;
+
+const NoAnsImg = styled.img`
+  width: 26.5625rem;
+  height: 8.73263rem;
+  object-fit: contain;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -98,23 +72,9 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const HeaderWrapper = styled.div`
-  display: flex;
-  align-items: flex-start;
-  width: 100%;
-  justify-content: start;
-  margin-bottom: 1.5rem;
-`;
-
 const ButtonWrapper = styled.div`
   margin-top: 4rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-`;
-
-const BestImg = styled.img`
-  width: 15.125rem;
-  height: 4.3125rem;
-  object-fit: contain;
 `;

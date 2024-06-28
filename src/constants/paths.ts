@@ -6,6 +6,7 @@ const paths = {
   survival: "/survival",
   final: "/final",
   timeout: "/timeout",
+  noanswer: "/noanswer",
 };
 
 export default paths;

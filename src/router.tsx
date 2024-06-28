@@ -13,6 +13,7 @@ import Splash from "./pages/splash";
 import Survival from "./pages/survival";
 import Final from "./pages/final";
 import TimeOut from "./pages/timeout";
+import NoAnswer from "./pages/responseError";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
       <Route path={paths.survival} element={<Survival />} />
       <Route path={paths.final} element={<Final />} />
       <Route path={paths.timeout} element={<TimeOut />} />
+      <Route path={paths.noanswer} element={<NoAnswer />} />
     </Route>
   )
 );
