@@ -21,7 +21,7 @@ const Home = () => {
         <PrideTitleWhite>재난 발생, 재난 발생,</PrideTitleWhite>
         <CoreTitleWhite>재난 생존기</CoreTitleWhite>
         <RightAlign>
-          <PrideTitleWhite>by ChatGPT</PrideTitleWhite>
+          <PrideTitleWhite>by BedRock</PrideTitleWhite>
         </RightAlign>
       </TitleWrapper>
       <MainCharacterImg src={mainCharacter} />

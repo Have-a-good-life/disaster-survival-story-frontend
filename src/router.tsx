@@ -6,13 +6,13 @@ import {
 } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import paths from "./constants/paths";
-
 import Home from "./pages/home";
 import Prompt from "./pages/prompt";
 import Result from "./pages/result";
 import Splash from "./pages/splash";
 import Survival from "./pages/survival";
 import Final from "./pages/final";
+import TimeOut from "./pages/timeout";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +23,7 @@ const router = createBrowserRouter(
       <Route path={paths.splash} element={<Splash />} />
       <Route path={paths.survival} element={<Survival />} />
       <Route path={paths.final} element={<Final />} />
+      <Route path={paths.timeout} element={<TimeOut />} />
     </Route>
   )
 );

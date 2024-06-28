@@ -66,7 +66,7 @@ export default Result;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  position: relative;
+
   align-items: center;
 `;
 const HeaderWrapper = styled.div`
@@ -78,6 +78,7 @@ const HeaderWrapper = styled.div`
 `;
 const InputWrapper = styled.div`
   margin-bottom: 8rem;
+  position: relative;
 `;
 const YouImg = styled.img`
   width: 9.4375rem;
@@ -110,15 +111,14 @@ const fadeIn = keyframes`
 
 const ImageWrapper = styled.div`
   position: absolute;
-
-  right: 0%;
-  top: 80%;
+  bottom: 13%;
+  right: 24%;
   animation: ${fadeIn} 3s ease-in-out;
 `;
 
 const BtnWrapper = styled.div`
   position: fixed;
-  bottom: 1%;
+  bottom: 3%;
   display: flex;
   justify-content: center;
   width: 100%;

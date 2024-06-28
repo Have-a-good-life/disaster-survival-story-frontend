@@ -23,7 +23,8 @@ const Container = styled.div`
 `;
 
 const Inner = styled.div`
-  width: 26.875rem;
+  width: 100vw;
+  min-width: 26.875rem;
   height: 100vh;
   background-color: white;
   border-radius: 8px;

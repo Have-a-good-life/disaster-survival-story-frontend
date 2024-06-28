@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import paths from "@/constants/paths";
 import { evaluationState, injuryState } from "@/recoils/atoms";
 import { useRecoilValue } from "recoil";
+import Slide from "@/components/slide/Slide";
 
 const Index = () => {
   const [isApiSuccess, setIsApiSuccess] = useState(false);
@@ -15,7 +16,11 @@ const Index = () => {
 
   useEffect(() => {
     if (evaluation !== "" && injury !== "") {
-      navigate(paths.result);
+      setTimeout(() => {
+        setTimeout(() => {
+          navigate(paths.result);
+        }, 3000);
+      }, 3000);
     }
   }, [evaluation, injury, navigate]);
 

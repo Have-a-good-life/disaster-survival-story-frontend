@@ -24,38 +24,56 @@ const Prompt = () => {
   const [evaluation, setEvaluation] = useRecoilState(evaluationState);
   const [injury, setInjury] = useRecoilState(injuryState);
   const navigate = useNavigate();
+
   const [situation] = useRecoilState(situationState);
   const displayedDesc = useTypingEffect(situation.situationDesc || "", 100);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prevProgress) => {
-        if (prevProgress <= 0) {
-          clearInterval(timer);
-          setTimeout(() => {
-            setShowSlide(true);
-            setTimeout(() => {
-              setProgress(100);
-              setPage("answer");
-              setShowSlide(false);
-              const secondTimer = setInterval(() => {
-                setProgress((prevProgress) => {
-                  if (prevProgress <= 0) {
-                    clearInterval(secondTimer);
-                    setTimeout(() => navigate(paths.survival), 100);
-                    return 0;
-                  }
-                  return prevProgress - 100 / 100; // 100초 동안 진행
-                });
-              }, 1000);
-            }, 3000); // 슬라이드 애니메이션 시간
-          }, 1500); // 프로그레스 바가 다 사라진 후 1초 후 슬라이드 시작
-          return 0;
-        }
-        return prevProgress - 100 / 15;
-      });
-    }, 1000);
 
-    return () => clearInterval(timer);
+  useEffect(() => {
+    let firstTimer: NodeJS.Timeout;
+    let secondTimer: NodeJS.Timeout;
+
+    const startFirstTimer = () => {
+      firstTimer = setInterval(() => {
+        setProgress((prevProgress) => {
+          if (prevProgress <= 0) {
+            clearInterval(firstTimer);
+            handleFirstTimeout();
+            return 0;
+          }
+          return prevProgress - 100 / 15;
+        });
+      }, 1000);
+    };
+
+    const startSecondTimer = () => {
+      secondTimer = setInterval(() => {
+        setProgress((prevProgress) => {
+          if (prevProgress <= 0) {
+            clearInterval(secondTimer);
+            navigate(paths.timeout); // 두 번째 타임아웃 시 timeout 페이지로 이동
+            return 0;
+          }
+          return prevProgress - 100 / 10; // 100초 동안 진행
+        });
+      }, 1000);
+    };
+
+    const handleFirstTimeout = () => {
+      setShowSlide(true);
+      setTimeout(() => {
+        setProgress(100);
+        setPage("answer");
+        setShowSlide(false);
+        startSecondTimer();
+      }, 3000); // 슬라이드 애니메이션 시간
+    };
+
+    startFirstTimer();
+
+    return () => {
+      clearInterval(firstTimer);
+      clearInterval(secondTimer);
+    };
   }, [navigate, setProgress]);
 
   const handleInputChange = (e: { target: { value: string } }) => {
@@ -66,12 +84,12 @@ const Prompt = () => {
   };
 
   const handleTestClick = async () => {
-    setProgress(0);
     if (situation.situationId === undefined) {
       console.error("Situation ID is undefined");
       return;
     }
     try {
+      navigate(paths.survival);
       const response = await evaluateUserReaction({
         situation_id: situation.situationId,
         user_reaction: inputValue,
@@ -96,18 +114,20 @@ const Prompt = () => {
           {page === "prompt" ? displayedDesc : situation.situationDesc}
         </PromptMsgWrapper>
       </PromptWrapper>
-      {page === "answer" && (
-        <>
-          <StrMsgImg src={strMsg} />
-          <StyledTextarea
-            value={inputValue}
-            onChange={handleInputChange}
-            placeholder="입력하세요..."
-          />
-          <CharacterCount>{inputValue.length} / 140</CharacterCount>
-          <TestMsgImg onClick={handleTestClick} src={testMsg} />
-        </>
-      )}
+      <Wrapper>
+        {page === "answer" && (
+          <>
+            <StrMsgImg src={strMsg} />
+            <StyledTextarea
+              value={inputValue}
+              onChange={handleInputChange}
+              placeholder="입력하세요..."
+            />
+            <CharacterCount>{inputValue.length} / 140</CharacterCount>
+            <TestMsgImg onClick={handleTestClick} src={testMsg} />
+          </>
+        )}
+      </Wrapper>
     </Container>
   );
 };
@@ -125,6 +145,7 @@ const StrMsgImg = styled.img`
 
 const TestMsgImg = styled.img`
   margin-top: 2rem;
+  cursor: pointer;
 `;
 
 const slideUpDown = keyframes`
@@ -166,7 +187,7 @@ const PromptWrapper = styled.div<{ page: string; showSlide: boolean }>`
 
 const PromptMsgWrapper = styled.h1`
   color: #fff;
-  text-align: center;
+  text-align: left;
   font-family: Pretendard;
   font-size: 1.25rem;
   font-style: normal;
@@ -230,4 +251,10 @@ const CharacterCount = styled.div`
   margin-top: 0.5rem;
   margin-right: 2rem;
   margin-left: auto;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;

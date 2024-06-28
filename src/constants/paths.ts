@@ -5,6 +5,7 @@ const paths = {
   splash: "/splash",
   survival: "/survival",
   final: "/final",
+  timeout: "/timeout",
 };
 
 export default paths;
