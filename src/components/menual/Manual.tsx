@@ -25,9 +25,9 @@ const Container = styled.div`
   width: 23.1875rem;
   height: 36.25rem;
   border-radius: 1.25rem;
-  background: rgba(227, 227, 227, 0.73);
+  background: rgb(227, 227, 227);
   z-index: 20;
-  backdrop-filter: blur(20px);
+
   display: flex;
   flex-direction: column;
   align-items: center;
