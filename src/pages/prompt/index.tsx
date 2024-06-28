@@ -61,7 +61,7 @@ const Prompt = () => {
             navigate(paths.timeout); // 두 번째 타임아웃 시 timeout 페이지로 이동
             return 0;
           }
-          return prevProgress - 100 / 10; // 100초 동안 진행
+          return prevProgress - 100 / 100; // 100초 동안 진행
         });
       }, 1000);
     };
