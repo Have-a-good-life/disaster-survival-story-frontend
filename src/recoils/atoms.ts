@@ -24,3 +24,8 @@ export const injuryState = atom<string>({
   key: "injuryState",
   default: "",
 });
+
+export const currentPageState = atom({
+  key: "currentPageState",
+  default: "/",
+});
